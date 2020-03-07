@@ -1,4 +1,4 @@
-use std::io::{Read, Write};
+use std::io::{Read};
 use std::net::{Shutdown, TcpListener, TcpStream};
 use std::str;
 use std::thread;
@@ -13,10 +13,15 @@ fn handle_client(mut stream: TcpStream) {
                     break;
                 }
                 println!("Received raw : {:?}", &data[0..size]);
-                println!("Received     : {:?}", str::from_utf8(&data[0..size]));
+
+                let _s = match str::from_utf8(&data[0..size]) {
+                    Ok(v) => println!("Received     : {:?}", v),
+                    Err(e) => println!("Invalid UTF8 : {}", e),
+                };
                 print!("#######################################################################\n");
+
                 //stream.write(&data[0..size]).unwrap();
-                stream.write(String::from(" -> Ack\n").as_bytes()).unwrap();
+                //stream.write(String::from(" -> Ack\n").as_bytes()).unwrap();
             }
             Err(_) => {
                 println!(
