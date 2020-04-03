@@ -4,6 +4,8 @@ use std::str;
 use std::thread;
 
 fn handle_client(mut stream: TcpStream) {
+    let thread_id = thread::current().id();
+    println!("New handlers : {:?}", thread_id);
     loop {
         let mut data = [0 as u8; 50]; // using 50 byte buffer
         match stream.read(&mut data) {
